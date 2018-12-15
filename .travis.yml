@@ -5,3 +5,21 @@ script:
  - mvn package
  - java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
  
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "IQsW+qXYFcJFWd2UsGx/oxL78tnrLgPFNkFltFytKpdomzXoVae2rz2yz+pQkC6C9gL47u5SaNIiEe+gpucPeLYCtSwdErY+Q5nKrsws4+JQyZlaAIpcuG5jr8R1X/nVsF6LQCAID3v2vEs8T2fwe0809R5E90LK+V2l+3mwzo80WiUOlSfQU/fs2FxK01GfUmnULOYf6x9MeM76uu0OMMEQmxSsWcXTa0e7t7gURQhlNrhIvdsj9THLmjlTGMW638mAPys1rIE7oGL4JFSJpoedBS61RPIF5t/lB8/HqXMCBL/i6wxgitGncnQcYM7Rz3dCxtvuBWV4ZgJ+MTIOOOlxVouXiMro2vRY5gv/pPX44M3koxuYxG9HlZkqNzEKEaVSE9DkZb8RJxgMw8BGHaJlL28YQrMvOYiFj7H3qKEX5nGV8NePiOJtx1l9u0RynfyEL0Ukajn5CRJiBpvGxN1T0Haxb9lBmcsarvSDcBqoK0dS0dTWP+kr6BYScW5YsLaBV+fRvryvSGyLwth27pRxUFCzwWf59cWlHMGOGtUukjgo7CqcMvImzU/jvEorOJYRkP/3tvdXpSbhc12iM8btIZYIl8JJwma+sxeAEiPIOdd89lsV3XE9pcY3ml2bGAx6aMnhSD0stDl+H2t18ZhChN3VunBEi4i8PQAZav4="
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "Prakashja/mvn-helloworld"
+      description: "Helloworld"
+    notification_email: jayaprakash0394@gmail.com
+    build_command_prepend: "cd my-app"
+    build_command: "mvn package"
+    branch_pattern: coverity_scan
